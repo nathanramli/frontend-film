@@ -1,1 +1,1 @@
-export const API_URL = 'http://localhost:8000';
+export const API_URL = window.location.hostname === "localhost" ? 'http://localhost:8000' : 'https://api.fansnime.com';

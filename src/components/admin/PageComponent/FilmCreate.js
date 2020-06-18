@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import LoadingBar from 'react-top-loading-bar';
 // Material UI
 import Button from '@material-ui/core/Button';
@@ -38,6 +41,9 @@ class FilmCreate extends Component {
           loading: 0
       };
 
+      static propTypes = {
+        auth: PropTypes.object.isRequired
+      };
 
       handleCreate(){
         this.setState({loading: 1});
@@ -55,6 +61,7 @@ class FilmCreate extends Component {
         form_data.append("deskripsi", this.state.deskripsi);
         form_data.append("jenis", this.state.jenis);
         form_data.append("genre", this.state.genre);
+        form_data.append("admin", this.props.auth.user.username);
         let ekstensi = this.state.gambar.name.split("."); 
         form_data.append("gambar", this.state.gambar, this.state.kode + '.' + ekstensi[ekstensi.length-1]);
 
@@ -229,7 +236,7 @@ class FilmCreate extends Component {
                         <TextField label="Mulai Tayang" margin="normal" onChange={this.handleChangesMulaiTayang.bind(this)} placeholder="Contoh: 1 Januari 2019 / Januari 2019" fullWidth required/>
                       </Grid>
                      <Grid item xs={12}>
-                        <TextField label="Selesai Tayang" margin="normal" onChange={this.handleChangesSelesaiTayang.bind(this)} placeholder="Contoh: 1 Desember 2019 / Desember 2019" helperText="Jika belum tamat kosongkan" fullWidth/>
+                        <TextField label={this.state.jenis === "o" ? "Judul Untuk Update" : "Selesai Tayang"} margin="normal" onChange={this.handleChangesSelesaiTayang.bind(this)} placeholder={this.state.jenis === "o" ? "Contoh: Naruto Shippuden (Episode 10) atau Naruto Shippuden (Episode 1-10)" : "Contoh: 1 Desember 2019 / Desember 2019"} helperText={this.state.jenis === "o" ? "Contoh: Naruto Shippuden (Episode 10) atau Naruto Shippuden (Episode 1-10)" : ""} required fullWidth/>
                       </Grid>
                      <Grid item xs={12}>
                         <TextField label="Studio" margin="normal" onChange={this.handleChangesStudio.bind(this)} fullWidth/>
@@ -280,5 +287,8 @@ class FilmCreate extends Component {
         );
       }  
 }
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-export default FilmCreate;
+export default connect(mapStateToProps)(FilmCreate);

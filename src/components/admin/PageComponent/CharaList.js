@@ -16,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+// import EditIcon from '@material-ui/icons/Edit';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -35,6 +36,7 @@ class  CharaList  extends  Component {
       open: false,
       file: "/placeholder.png", 
       gambar: null,
+      // pk: '',
       loading: 0
   }
 
@@ -56,6 +58,58 @@ class  CharaList  extends  Component {
         });
       }    
   }
+
+  // handleUpdate(pk){
+  //   this.setState({loading: 1});
+  //   const { match: { params } } = this.props;
+
+  //   let form_data = new FormData();
+  //   form_data.append("id_film", params.pk); 
+  //   form_data.append("nama", this.state.nama); 
+  //   form_data.append("foto", this.state.gambar, this.state.gambar.name);
+
+  //   let url = `${API_URL}/api/chara_detail/${pk}`;
+  //   axios.put(url, form_data, {
+  //         headers: {
+  //           'content-type': 'multipart/form-data'
+  //         },
+  //         onUploadProgress: (progressEvent) => {
+  //           if(progressEvent.lengthComputable){
+  //             let percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+  //             this.setState({loading: this.state.loading+percent});     
+  //           }else{
+  //             this.setState({loading: 100});
+  //           }
+  //         }
+  //   }).then((result)=>{
+  //     alert("Character berhasil diedit!");
+  //     var  newArr  =  this.state.chara.filter(function(obj) {
+  //         return  obj.pk  !==  pk;
+  //     });
+
+  //     this.setState({chara:  newArr});
+
+  //     let charaBaru = {
+  //       id_film: result.data.id_film,
+  //       nama: result.data.nama,
+  //       foto: API_URL + result.data.foto,
+  //       pk: result.data.pk
+  //     }
+  //     this.setState(prevState => ({
+  //       chara: [...prevState.chara, charaBaru]
+  //     }))
+
+  //     this.setState({
+  //       nama: '',
+  //       gambar: null,
+  //       file: "/placeholder.png"
+  //     });
+  //     document.getElementsByTagName('form')[0].reset();
+  //   }).catch(()=>{
+  //     alert('Terdapat error pada form/sistem.');
+  //     this.setState({loading: 0});
+  //   });    
+  // }
 
   handleCreate(){
     this.setState({loading: 1});
@@ -113,7 +167,10 @@ class  CharaList  extends  Component {
   }
   toggleClose(){
       this.setState({
-        open: false
+        open: false,
+        gambar: null,
+        file: "/placeholder.png",
+        nama: '',
       });
   }
   toggleOpen(){
@@ -121,7 +178,19 @@ class  CharaList  extends  Component {
         open: true
       });
   }
+  // openUpdate(pk){
+  //     let data = this.state.chara.filter(function(obj) {
+  //         return obj.pk === pk;
+  //     });
 
+  //     this.setState({
+  //       // nama: data.nama,
+  //       pk: data.pk,
+  //       file: data.foto,
+  //       gambar: data.foto,
+  //       open: true
+  //     });
+  // }
   handleChangeNama(event){
     this.setState({nama: event.target.value});
   }
@@ -166,6 +235,7 @@ class  CharaList  extends  Component {
                                 title={row.nama}
                               />
                               <CardContent>
+                                {/*<Fab onClick={() => this.openUpdate(row.pk)} color="primary" size="small" style={{float: 'right'}}><EditIcon style={{fontSize: 20}}/></Fab>*/}
                                 <Fab onClick={(e) =>  {if(window.confirm('Anda yakin ingin menghapus character ini?')) this.handleDelete(e,row.pk)} } color="secondary" size="small" style={{float: 'right'}}><DeleteIcon style={{fontSize: 20}}/></Fab>
                                 <Typography gutterBottom variant="h6">
                                   {row.nama}
@@ -183,16 +253,17 @@ class  CharaList  extends  Component {
           </Container>
           <Dialog open={this.state.open} onClose={this.toggleClose.bind(this)} fullWidth maxWidth="lg" aria-labelledby="title">
             <form onSubmit={this.handleSubmit.bind(this)}>
-            <DialogTitle id="title">Tambah Character</DialogTitle>
+            <DialogTitle id="title">{this.state.pk !== "" ? 'Edit' : 'Tambah'} Character</DialogTitle>
             <DialogContent dividers>
                 <div style={{textAlign: 'center'}}>
                   <img src={this.state.file} height="300px" alt=""/>
                 </div>
                 <input id="upload" accept="image/*" onChange={this.handleChangesGambar.bind(this)} type="file" required/>
-                <TextField onChange={this.handleChangeNama.bind(this)} label="Nama" margin="normal"  fullWidth required/>
+                <TextField onChange={this.handleChangeNama.bind(this)} label="Nama" margin="normal" value={this.state.nama} fullWidth required/>
             </DialogContent>
             <DialogActions>
                 <Button type="submit" variant="contained" color="primary">Tambah</Button>
+                <Button type="button" variant="contained" color="secondary" onClick={this.toggleClose.bind(this)}>Tutup</Button>
             </DialogActions>
             </form>
           </Dialog>

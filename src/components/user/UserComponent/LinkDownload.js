@@ -29,11 +29,11 @@ function LinkDownload(props){
                 </ListItemIcon>
                 <ListItemText>
                    <Chip size="small" label={pixel + 'p'} color="primary"/> :&nbsp; 
-                  {source.map((row) => { 
+                  {source.map((row, index) => { 
                     const isi = row.split('|||');
                     return (
                       <React.Fragment key={isi[1]}>
-                        <a target="_blank" rel="noopener noreferrer" href={isi[1]}>{isi[0]}</a>&nbsp;|&nbsp;
+                        <a target="_blank" rel="noopener noreferrer" href={isi[1]}>{isi[0]}</a>{index+1 === source.length ? '' : ' | ' }
                       </React.Fragment>
                     )
                   }

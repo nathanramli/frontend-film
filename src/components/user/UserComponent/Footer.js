@@ -55,13 +55,14 @@ const Footer = () =>{
         We <img src="/favicon.png" width={50} alt="Love" style={{verticalAlign: 'middle'}} /> Fansnime
 	    	</div>
         <div style={{textAlign: 'center', color: 'white', padding: 10}}>
+          "Kenyamanan pengguna adalah Prioritas kami."<br/>
           Fansnime berdiri dibawah naungan FansGroup yang juga menyediakan beberapa konten untuk anda penikmat :<br/><br/>
           Drama Korea (Coming Soon) <a href="/" target="_blank" rel="noopener noreferrer"><Chip style={{marginBottom: 10}} label="FansDrakor" color="primary" /></a><br/>
           Anime <a href="https://fansnime.com/" target="_blank" rel="noopener noreferrer"><Chip label="FansNime" color="secondary" /></a><br/><br/>
-          <Button size="small" className={classes.facebook}>Facebook</Button> &bull; <Button size="small" className={classes.twitter}>Twitter</Button>
+          <Button href="https://www.facebook.com/fansnimeID/" target="_blank" component="a" size="small" className={classes.facebook}>Facebook</Button> &bull; <Button size="small" className={classes.twitter}>Twitter</Button>
         </div>
 	    	<div className={classes.divGan2}>
-	    		Copyright &copy; 2019, Developed by FansGroup &bull; Fansnime.com &bull; Contact admin@fansnime.com
+	    		Copyright &copy; 2019, Developed by FansGroup &bull; Contact admin@fansnime.com
 	    	</div>
 	    </Container> 
 	);

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {Helmet} from 'react-helmet';
 // Component
 import NotFound from './NotFound';
 import LinkDownload from '../UserComponent/LinkDownload';
 import Loading from '../UserComponent/Loading';
 // Material UI
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
+import Avatar from '@material-ui/core/Avatar';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Chip from '@material-ui/core/Chip';
@@ -18,6 +19,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 // Additional
@@ -30,8 +32,9 @@ const styles = theme => ({
   adsContainer:{
     marginRight: 'auto',
     marginLeft: 'auto',
-    height:'540px',
+    height:'880px',
     position:'sticky',
+//    position: '-webkit-sticky',
     backgroundColor:'white',
     borderRadius:'2px',
     top:'4rem',
@@ -52,9 +55,8 @@ const styles = theme => ({
   ads:{
     margin:'10px',
     padding:'10px',
-    boxShadow:'0px 1px 2px #ddd',
     [theme.breakpoints.only('xs')]:{
-      margin:'5px',
+      margin:'10px',
       padding:'5px',
     }  
   }
@@ -76,6 +78,7 @@ class AnimeDetail extends Component {
           studio: '',
           rating: '',
           credit: '',
+          admin: '',
           genre: [],
           chara: [],
           link: [],
@@ -115,6 +118,7 @@ class AnimeDetail extends Component {
             this.setState({studio:row.film.studio});
             this.setState({rating:row.film.rating});
             this.setState({credit:row.film.credit});
+            this.setState({admin:row.film.admin});
             this.setState({jenis:row.film.jenis});
             this.setState({chara: row.chara});
             this.setState({link: row.link});
@@ -127,7 +131,8 @@ class AnimeDetail extends Component {
             this.page.url = "https://fansnime.com/";  // Replace PAGE_URL with your page's canonical URL variable
             this.page.identifier = params.kode; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
           };
-
+          let zz = document.getElementsByTagName("iframe");
+          console.log(zz);
           // formalitas supaya ga warning
           disqus_config.toString();
 
@@ -138,10 +143,34 @@ class AnimeDetail extends Component {
             (d.head || d.body).appendChild(s);
           })();
 
+          var loadScript = function (src, target) {
+            console.log("load script");
+            var tag = document.createElement('script');
+            tag.type = 'text/javascript';
+            tag.setAttribute("data-cfasync", false);
+            tag.src = src;
+            var body = document.getElementById(target);
+            body.appendChild(tag);
+          }
+         // loadScript("//p370651.clksite.com/adServe/banners?tid=370651_726965_0", "ad1");
+         // loadScript("//p370651.clksite.com/adServe/banners?tid=370651_726965_1", "ad2");
+          var buatScript = function(target, isi){
+            console.log("buat script");
+            const s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.setAttribute("data-cfasync", false);
+            s.innerHTML = isi;
+            document.getElementById(target).appendChild(s);            
+          }
+          loadScript("//st.bebi.com/bebi_v3.js", "ad1");
+          buatScript("ad1", `if(!window.BB_a) { BB_a = [];} if(!window.BB_ind) { BB_ind = 0; } if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)} BB_ind++; BB_a.push({ "pl" : 2008720, "index": BB_ind});`);
+          buatScript("ad1", `if(!window.BB_a) { BB_a = [];} if(!window.BB_ind) { BB_ind = 0; } if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)} BB_ind++; BB_a.push({ "pl" : 2008719, "index": BB_ind});`);
         }
         // window.scrollTo({ top:1, behavior: 'smooth', });//Tidak support pada beberapa browser lama
         window.scrollTo(0, 0);
       }
+
+
 
       getWarna(genre){
         const genres = [
@@ -200,17 +229,34 @@ class AnimeDetail extends Component {
           return (
             <React.Fragment>
             <Loading progress={this.state.loading}/>
-            <Grid container style={{marginTop:'10px'}} >
+            <Helmet>
+              <meta property="og:type" content="article" />
+              <meta property="og:title" content={`${this.state.judul !== "" ? this.state.jenis !== "o" ? this.state.judul : this.state.selesai_tayang + ' Subtitle Indonesia' : 'Anime Sub Indo'} | Fansnime`}/>
+              <meta property="og:description" content={`Download ${this.state.judul} Sub Indo format Mkv 480p, Mkv 720p, Mp4 720p, Mp4 480p, Mp4 360p, Mp4 240p dan BATCH`}/>
+              <meta property="og:image" content="%PUBLIC_URL%/favicon.png" />
+              <meta property="og:url" content={`https://fansnime.com/${this.state.kode}`} />
+              <meta property="og:site_name" content="Fansnime" />    
+
+              <meta name="twitter:title" content={`${this.state.judul !== "" ? this.state.jenis !== "o" ? this.state.judul : this.state.selesai_tayang + ' Subtitle Indonesia' : 'Anime Sub Indo'} | Fansnime`} />
+              <meta name="twitter:description" content={`Download ${this.state.judul} Sub Indo format Mkv 480p, Mkv 720p, Mp4 720p, Mp4 480p, Mp4 360p, Mp4 240p dan BATCH`} />
+              <meta name="twitter:image" content="%PUBLIC_URL%/favicon.png" />
+              <meta name="twitter:site" content="@fansnimeID" />
+              <meta name="twitter:creator" content="@fansnimeID" />
+
+              <title>{this.state.judul !== "" ? this.state.jenis !== "o" ? this.state.judul : this.state.selesai_tayang + ' Subtitle Indonesia' : 'Anime Sub Indo'} | Fansnime</title>
+              <meta name="description" content={`Download ${this.state.judul} Sub Indo format Mkv 480p, Mkv 720p, Mp4 720p, Mp4 480p, Mp4 360p, Mp4 240p dan BATCH`} />
+            </Helmet>
+            <Grid container>
               <Grid item xs={12} md={8} style={{backgroundColor:'#fff',borderRadius:'3px'}} className={this.props.classes.containerDetail}>
-                <div style={{backgroundImage: `url(${this.state.gambar})`, paddingBottom: '50%', backgroundSize: '100%', backgroundRepeat: 'no-repeat'}}>
+                <div title={this.state.judul + ' Subtitle Indonesia'} style={{backgroundImage: `url(${this.state.gambar})`, paddingBottom: '50%', backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat', boxShadow: '0 0 10px 2px silver', borderRadius: '5px'}}>
                   <div style={{padding: 10}}>
                   {this.state.genre.map(row =>
                     <Chip size='small' key={row} label={row} style={{margin: 2, color: 'black', border: `3px solid ${this.getWarna(row)}`, backgroundColor: 'rgba(255, 255, 255, 0.8)', boxShadow: `0 0 10px ${this.getWarna(row)}`}} />
                   )}
                   </div>
                 </div>
-                <Container maxWidth="lg" style={{marginBottom:'10px'}}>
-                  <h2>{this.state.judul}</h2>
+                <Container maxWidth="lg" style={{padding: '10px'}}>
+                  <h2>{this.state.jenis !== "o" ? this.state.judul : this.state.selesai_tayang} Subtitle Indonesia</h2>
                  <Card style={{marginTop:'10px'}}>
                     <CardContent>
                       <Typography style={{fontSize:'20px'}} gutterBottom>
@@ -224,7 +270,7 @@ class AnimeDetail extends Component {
                   </Card>
 
                   {this.state.chara.length !== 0 &&
-                  <Card style={{marginTop:'10px'}}>
+                  <Card style={{marginTop:'10px', boxShadow: 'none'}}>
                     <CardContent>
                     <Typography variant="h6">Characters</Typography>
                     <div style={{overflowX: 'auto', width: '100%'}}>
@@ -234,13 +280,9 @@ class AnimeDetail extends Component {
                           <CardMedia
                             style={{height: 0, paddingTop: "120%"}}
                             image={row.foto}
-                            title={row.nama}
-                          />
-                          <CardActions>
-                            <Typography gutterBottom variant="h6">
-                              {row.nama}
-                            </Typography>
-                          </CardActions>
+                            title={row.nama}>
+                            <div style={{backgroundColor: 'rgba( 0, 0, 0, 0.5)', color: 'white', fontFamily: 'Verdana', width: '100%', marginTop: '-15%', padding: 5}}>{row.nama}</div>
+                          </CardMedia>
                         </Card>
                       </div>
                       )}
@@ -295,12 +337,31 @@ class AnimeDetail extends Component {
                             <TableCell>Credit</TableCell>
                             <TableCell>{this.state.credit}</TableCell>
                           </TableRow>                            
+                          <TableRow>
+                            <TableCell style={{border: 'none'}}>Diposting Oleh</TableCell>
+                            {this.state.admin === "GotThisR" || this.state.admin === "mandu" ?
+                              <TableCell style={{border: 'none'}}>
+                                <Tooltip title="Developer">
+                                  <Chip style={{color: 'orange', border: '1px solid orange'}} label={this.state.admin} variant="outlined" avatar={<Avatar style={{backgroundColor: 'orange', color: 'white', width:'32px', height: '32px', fontSize: '1rem'}}>{this.state.admin.substr(0, 1).toUpperCase()}</Avatar>}/>
+                                </Tooltip>
+                              </TableCell>
+                            :
+                              <TableCell style={{border: 'none'}}>
+                                <Tooltip title="Administrator">
+                                  <Chip style={{color: '#f50057', border: '1px solid #f50057'}} label={this.state.admin} variant="outlined" avatar={<Avatar style={{backgroundColor: '#c51162', color: 'white', width:'32px', height: '32px', fontSize: '1rem'}}>{this.state.admin.substr(0, 1).toUpperCase()}</Avatar>}/>
+                                </Tooltip>
+                              </TableCell>
+                            }
+                          </TableRow>                            
                         </TableBody>
                       </Table>
                     </CardContent>
                   </Card>
 
                   <Card style={{marginTop:'10px'}}>
+                      <CardContent style={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+                        <h3 style={{ color: 'grey' }}>Link Download {this.state.jenis !== "o" ? this.state.judul : this.state.selesai_tayang} Subtitle Indonesia</h3>
+                    </CardContent>
                       {this.state.link.map(row => 
                         <LinkDownload key={row.pk} nama_film={this.state.judul} judul={row.judul_link} url1080={row.url1080p[0].split(',')} url720={row.url720p[0].split(',')} url540={row.url540p[0].split(',')} url480={row.url480p[0].split(',')}  url360={row.url360p[0].split(',')} url240={row.url240p[0].split(',')}/>
                       )}
@@ -310,16 +371,9 @@ class AnimeDetail extends Component {
                   <div id="disqus_thread"></div>                            
                 </Container>
               </Grid>
-              <div className={this.props.classes.adsContainer} >
-                <div  className={this.props.classes.ads}>
-                  Ads Here
+              <div className={this.props.classes.adsContainer} id="mainAds">
+                <div  className={this.props.classes.ads} id="ad1">
                 </div>
-                <div  className={this.props.classes.ads}>
-                  Ads Here
-                </div>
-                <div  className={this.props.classes.ads}>
-                  Ads Here
-                </div> 
               </div>
             </Grid>
             </React.Fragment>

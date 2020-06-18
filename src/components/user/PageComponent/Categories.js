@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Helmet} from 'react-helmet';
 
 import  FilmsService  from  '../../../FilmsService';
 // Component
@@ -7,10 +8,11 @@ import Loading from './../UserComponent/Loading';
 import RecipeReviewCard from './../UserComponent/AnimeCard';
 // Material UI
 import Chip from '@material-ui/core/Chip';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
 import LeftIcon from '@material-ui/icons/ChevronLeft';
 import RightIcon from '@material-ui/icons/ChevronRight';
-import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
 // Additional
 import {API_URL} from '../../../constants';
 
@@ -32,7 +34,7 @@ class Categories extends Component {
 	        if(params && params.genre)
 	        {
 	        	this.setState({genre: params.genre});
-				const url = `${API_URL}/api/film_genre/${params.genre}`;
+				const url = `${API_URL}/api/film_genre/${params.genre}/`;
 	        	axios.get(url, {
 	            onDownloadProgress: (progressEvent) => {
 						if(progressEvent.lengthComputable){
@@ -119,6 +121,23 @@ class Categories extends Component {
 			return(
 	          	<React.Fragment>
 	          	<Loading progress={this.state.loading}/>				
+		        <Helmet>	
+	              <meta property="og:type" content="article" />
+	              <meta property="og:title" content={`Genre ${this.state.genre} Anime Subtitle Indonesia | Fansnime`}/>
+	              <meta property="og:description" content={`Genre ${this.state.genre} anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`}/>
+	              <meta property="og:image" content="%PUBLIC_URL%/favicon.png" />
+	              <meta property="og:url" content={`https://fansnime.com/genre/${this.state.genre}`} />
+	              <meta property="og:site_name" content="Fansnime" />    
+
+	              <meta name="twitter:title" content={`Genre ${this.state.genre} Anime Subtitle Indonesia | Fansnime`} />
+	              <meta name="twitter:description" content={`Genre ${this.state.genre} anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`} />
+	              <meta name="twitter:image" content="%PUBLIC_URL%/favicon.png" />
+	              <meta name="twitter:site" content="@fansnimeID" />
+	              <meta name="twitter:creator" content="@fansnimeID" />
+
+		          <title>Genre {this.state.genre} Anime Subtitle Indonesia | Fansnime</title>
+		          <meta name="description" content={`Genre ${this.state.genre} anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`} />
+		        </Helmet>
 				<Grid container style={{marginTop: '10px',backgroundColor:'white',borderRadius:'2px',padding:'10px'}}> 
 					<Grid item xs={12} style={{padding:'10px',backgroundColor:'rgb(38, 50, 56)',border: `3px solid ${this.getWarna(this.state.genre)}`,boxShadow: `0 0 10px ${this.getWarna(this.state.genre)}`}}>
 		                <div style={{marginTop:'2px',textAlign:'center',color:`${this.getWarna(this.state.genre)}`,fontWeight:'bold',fontSize:'24px'}}>
@@ -129,11 +148,11 @@ class Categories extends Component {
 						<Grid item xs={12} sm={6} md={4} lg={3} key={row.pk} style={{padding: 10}}>
 							<RecipeReviewCard judul={row.judul} gambar={row.gambar.indexOf('http') !== -1 ? row.gambar : API_URL + '/media/' + row.gambar} tanggal={row.tanggal_post} rating={row.rating} link={row.kode}/>
 						</Grid>
-					) : this.state.loading === 1 ? <h4>Sedang Loading...</h4> :  <h4>Tidak ada anime terkait.</h4>}
+					) : this.state.loading === 1 ? <div style={{marginLeft: 'auto', marginRight: 'auto', padding: '100px 0 100px'}}><CircularProgress /></div> :  <h4>Tidak ada anime terkait.</h4>}
 				</Grid>
 				<Grid container style={{marginTop: '10px',backgroundColor:'white',borderRadius:'2px',padding:'10px'}}>
 					<Fab onClick={this.prevPage.bind(this)} size="small" color="secondary"><LeftIcon/></Fab>&nbsp;
-					<Chip style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: 'orange'}} label={`${this.state.current} dari ${this.state.numpages} halaman`} />&nbsp;
+					<Chip style={{marginTop: 'auto', marginBottom: 'auto', backgroundColor: 'transparent', border: '2px solid black'}} label={`${this.state.current} dari ${this.state.numpages}`} />&nbsp;
 					<Fab onClick={this.nextPage.bind(this)} size="small" color="primary"><RightIcon/></Fab>
 				</Grid>
 				</React.Fragment>

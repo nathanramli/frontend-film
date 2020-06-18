@@ -4,16 +4,17 @@ import  FilmsService  from  '../../../FilmsService';
 
 // Material UI
 import AddIcon from '@material-ui/icons/AddCircle';
-import LeftIcon from '@material-ui/icons/ChevronLeft';
-import RightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Fab from '@material-ui/core/Fab';
-import SearchIcon from '@material-ui/icons/Search';
+import LeftIcon from '@material-ui/icons/ChevronLeft';
 import LinkIcon from '@material-ui/icons/Link';
 import MonoIcon from '@material-ui/icons/PeopleRounded';
+import Paper from '@material-ui/core/Paper';
+import RightIcon from '@material-ui/icons/ChevronRight';
+import SearchIcon from '@material-ui/icons/Search';
 import StarIcon from '@material-ui/icons/Star';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -99,8 +100,9 @@ class  FilmsList  extends  Component {
             <form onSubmit={this.handleSubmit.bind(this)}>
               <TextField label="Cari" helperText="Hanya dapat menampilkan 5 pencarian terkait (Jika menggunakan tombol < > akan kembali ke FullList)" onChange={this.handleCari.bind(this)}/>
             </form>
-        </div>        
-        <Table style={{marginTop: 10, marginBottom: 10, overflowX: 'scroll'}}>
+        </div>
+        <Paper style={{overflowX: 'scroll'}}>
+        <Table>
         <TableHead>
           <TableRow>
               <TableCell>ID</TableCell>
@@ -148,6 +150,7 @@ class  FilmsList  extends  Component {
             )}
         </TableBody>
         </Table>
+        </Paper>
         <div style={{padding: 10, marginBottom: 10}}>
           <Fab onClick={this.prevPage} size="small" color="primary"><LeftIcon/></Fab>&nbsp;
           <Fab onClick={this.nextPage} size="small" color="primary"><RightIcon/></Fab>

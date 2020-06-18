@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link as RouterLink} from 'react-router-dom';
+import {Helmet} from 'react-helmet';
 
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -61,7 +62,25 @@ function Genre(){
         ['Vampire', '#9c2caf', 'genre/vampire'],
 	 ];
 	return(
+
 		<Grid container alignItems="center" justify="center" spacing={0} style={{backgroundColor:'#263238',padding:'20px'}}>
+            <Helmet>
+              <meta property="og:type" content="article" />
+              <meta property="og:title" content="Daftar Genre Anime Subtitle Indonesia | Fansnime"/>
+              <meta property="og:description" content={`Daftar Genre anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`}/>
+              <meta property="og:image" content="%PUBLIC_URL%/favicon.png" />
+              <meta property="og:url" content={`https://fansnime.com/genre`} />
+              <meta property="og:site_name" content="Fansnime" />    
+
+              <meta name="twitter:title" content="Daftar Genre Anime Subtitle Indonesia | Fansnime" />
+              <meta name="twitter:description" content={`Daftar Genre anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`} />
+              <meta name="twitter:image" content="%PUBLIC_URL%/favicon.png" />
+              <meta name="twitter:site" content="@fansnimeID" />
+              <meta name="twitter:creator" content="@fansnimeID" />
+
+              <title>Daftar Genre Anime Subtitle Indonesia | Fansnime</title>
+		      <meta name="description" content={`Daftar Genre anime subtitle indonesia. Download 720p 480p 360p 240p Format mkv mp4 + BATCH`} />
+            </Helmet>
 			{genre.map((row, index) =>
 				<Grid component={RouterLink} to={{pathname:`/${row[2]}`}} item xs={4} md={2} lg={2} xl={2} key={index} className={classes.gridItem}  style={{border: `3px solid ${row[1]}`,boxShadow: `0 0 10px ${row[1]}`,color:`${row[1]}`,textShadow:'-0px -0px -10px #000,  1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000',textDecoration:'none'}}>
 					{row[0]}

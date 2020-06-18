@@ -16,7 +16,7 @@
   height: 5px;
   left: 50%;
   position: absolute;
-  background: #fff;
+  background: #666;
   transition: width 0.3s ease 0s, left 0.3s ease 0s;
   width: 0;
 }

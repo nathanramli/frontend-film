@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch} from 'react-router-dom';
+
+import { Provider } from "react-redux";
+import store from "./store";
+import { loadUser } from "./actions/auth";
+
+import PrivateRoute from "./components/common/PrivateRoute";
+import Alerts from "./components/layout/Alerts";
  
 import TemplateAppBar from './components/admin/AdminComponent/TemplateAppBar';
 import TemplateFooterBar from './components/admin/AdminComponent/TemplateFooterBar';
@@ -7,10 +14,8 @@ import TemplateFooterBar from './components/admin/AdminComponent/TemplateFooterB
 import AnimeDetail from './components/user/PageComponent/AnimeDetail';
 import Categories from './components/user/PageComponent/Categories';
 import Genre from './components/user/PageComponent/Genre';
-import Ongoing from './components/user/PageComponent/Ongoing';
-import Complete from './components/user/PageComponent/Complete';
-import Movie from './components/user/PageComponent/Movie';
-
+import Jenis from './components/user/PageComponent/Jenis';
+import Cari from './components/user/PageComponent/Cari';
 
 import AppBarUser from './components/user/UserComponent/AppBarUser';
 import Anime from './components/user/PageComponent/Anime';
@@ -22,6 +27,8 @@ import FilmUpdate from './components/admin/PageComponent/FilmUpdate';
 import FilmDetail from './components/admin/PageComponent/FilmDetail';
 import LinksList from './components/admin/PageComponent/LinksList';
 import CharaList from './components/admin/PageComponent/CharaList';
+import Login from './components/admin/PageComponent/Login';
+// import Register from './components/admin/PageComponent/Register';
 
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,13 +37,13 @@ const Admin = ({ match }) => (
     <React.Fragment >
     <TemplateAppBar/>
       <Switch>
-        <Route path={`${match.path}/`} exact component={FilmsList} />
-        <Route path={`${match.path}/film`} exact component={FilmsList} />
-        <Route path={`${match.path}/film/add`} exact component={FilmCreate} />
-        <Route path={`${match.path}/film/detail/:pk`} component={FilmDetail} />
-        <Route path={`${match.path}/film/update/:pk`} component={FilmUpdate} />
-        <Route path={`${match.path}/film/link/:pk`} component={LinksList} />
-        <Route path={`${match.path}/film/chara/:pk`} component={CharaList} />
+        <PrivateRoute path={`${match.path}/`} exact component={FilmsList} />
+        <PrivateRoute path={`${match.path}/film`} exact component={FilmsList} />
+        <PrivateRoute path={`${match.path}/film/add`} exact component={FilmCreate} />
+        <PrivateRoute path={`${match.path}/film/detail/:pk`} component={FilmDetail} />
+        <PrivateRoute path={`${match.path}/film/update/:pk`} component={FilmUpdate} />
+        <PrivateRoute path={`${match.path}/film/link/:pk`} component={LinksList} />
+        <PrivateRoute path={`${match.path}/film/chara/:pk`} component={CharaList} />
       </Switch>
     <TemplateFooterBar/>
     </React.Fragment>
@@ -46,7 +53,6 @@ const useStyles = makeStyles(theme =>({
   containerAnime:{
     backgroundColor:'transparent',
     padding:'0',
-    color:'#e53935',
     borderRadius:'4px',
     height: 'auto',
     marginTop:'20px',
@@ -68,9 +74,10 @@ return (
             <Route path={props.match.path} exact component={Anime} />
             <Route path={`${props.match.path}genre`} exact component={Genre} />
             <Route path={`${props.match.path}genre/:genre`} exact component={Categories} />
-            <Route path={`${props.match.path}ongoing`} exact component={Ongoing} />
-            <Route path={`${props.match.path}complete`} exact component={Complete} />
-            <Route path={`${props.match.path}movie`} exact component={Movie} />
+            <Route path={`${props.match.path}ongoing`} exact component={Jenis} />
+            <Route path={`${props.match.path}complete`} exact component={Jenis} />
+            <Route path={`${props.match.path}movie`} exact component={Jenis} />
+            <Route path={`${props.match.path}cari`} component={Cari} />
             <Route path={`${props.match.path}:kode`} component={AnimeDetail} />
           </Switch>
         </Container>
@@ -79,23 +86,29 @@ return (
 );
 }
 
-const Content = () => (
+const Content = (props) => (
     <Switch>
-      <Route path="/admin" component={Admin} />
+      <Route path="/login" exact component={Login} />
+      <PrivateRoute path="/admin" component={Admin} />
       <Route path="" exact component={User} />
     </Switch>
 )
 
 // Kode harus paling bawah
 class App extends Component {
+  componentDidMount() {
+    store.dispatch(loadUser());
+  }
   
   render() {
     return (
-      <BrowserRouter>
-        <Content />
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Alerts/>
+          <Content/>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }
-
 export default App;

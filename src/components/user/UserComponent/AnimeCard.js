@@ -4,8 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
 import Star from '@material-ui/icons/StarRate';
+import Pencil from '@material-ui/icons/Edit';
 import red from '@material-ui/core/colors/red';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,15 @@ const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 400,
     boxShadow:'none',
+    '&:hover $rating':{
+      boxShadow: 'none'
+    },
+    '&:hover $creator':{
+      boxShadow: 'none'
+    },
+    '&:hover $star':{
+      color: 'yellow'
+    }    
   },
   media: {
     height: 0,
@@ -38,6 +47,34 @@ const useStyles = makeStyles(theme => ({
     padding:'0px',
     width:'100%',
   },
+  creator:{
+    marginTop: '-45%',
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    width: '30%',
+    borderRadius: '0 4px 4px 0',
+    fontSize: '13px',
+    padding: '1%',
+    boxShadow: '0 0 4px black',
+    textAlign: 'center',
+    transition: 'box-shadow 0.3s',
+  },
+  rating:{
+    marginTop: '-45%',
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    width: '21%',
+    borderRadius: '0 4px 4px 0',
+    fontSize: '14px',
+    padding: '1%',
+    boxShadow: '0 0 4px black',
+    textAlign: 'center',
+    transition: 'box-shadow 0.3s',
+  },
+  star:{
+    verticalAlign: 'middle',
+    transition: 'color 1s'
+  }
 }));
 
 function AnimeCard(props) {
@@ -83,14 +120,18 @@ function AnimeCard(props) {
             style={{height: 0}}
             className={classes.media}
             image={props.gambar}
-            title={props.judul}
-          />
+            title={props.judul}>
+            {props.jenis !== "m"
+              ? <div className={classes.rating}>{props.rating} <Star className={classes.star}/></div>
+              : <div className={classes.creator}>{props.pengarang} <Pencil style={{fontSize: 20}} className={classes.star}/></div>
+            }
+            </CardMedia>
           <CardActions>
             <Typography className={classes.sizeTitle}>{props.judul}</Typography>
           </CardActions>
           <Grid container>
             <Grid item xs={12} style={{padding:'10px',fontSize:'14px',color:'#aaa'}}>
-              Uploader &#8226; {fullTanggal} <Button disabled style={{padding: 0}}><Star style={{color: 'orange'}}/>{props.rating}</Button>
+              {fullTanggal}
             </Grid>
           </Grid>
       </CardActionArea>

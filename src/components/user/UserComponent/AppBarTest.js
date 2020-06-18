@@ -1,100 +1,123 @@
-import React from 'react';
-import Search from './Search.js';
+import React, { Component } from 'react';
 
-import {makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Fab from '@material-ui/core/Fab';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Logo from './../../../assets/image/bg.png';
+
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import { withRouter } from 'react-router';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItem from '@material-ui/core/ListItem';
+import List from '@material-ui/core/List';
+import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+
+import Home from '@material-ui/icons/Home';
+import Movie from '@material-ui/icons/Movie';
+import Favorite from '@material-ui/icons/Favorite';
+import Done from '@material-ui/icons/Done';
+import Play from '@material-ui/icons/PlayArrow';
 import Hamburger from '@material-ui/icons/Dehaze';
-import Close from '@material-ui/icons/Close';
 import {Link as RouterLink} from 'react-router-dom';
 
-const useStyles = makeStyles(theme =>({
-  list: {
-    width: 250,
+
+const styles = theme => ({
+  appBar: {
+    position: 'relative',
+    backgroundColor: 'transparent',
   },
-  fullList: {
-    width: '100',
-    height:'100%',
-    backgroundImage:`url('/bg-responsive-menu2.png')`,
-    backgroundSize:'cover',
-  },
-  tampilhamburger:{
+  hamburgercolor:{
+    color:'rgba(0, 0, 0, 0.87)',
     [theme.breakpoints.up('sm')]:{
         display:'none',
     },
   },
-  hamburgercolor:{
-    color:'white',
-  },
-}));
- 
-export default function AppBarTest() {
-  const classes = useStyles();
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+});
 
-  const toggleDrawer = (side, open) => event => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
-    setState({ ...state, [side]: open });
-  };
-  const fullList = side => (
-    <div
-      className={classes.fullList}
-      role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
-    >        
-      <List>
-            <div style={{padding:'5px',float:'right',margin:'10px'}}>
-            <Fab size="small" color="secondary" onClick={toggleDrawer('bottom',false)}>
-                <Close/>
-            </Fab>
-            </div>
+class AppBarTest extends Component {
+  state = {
+    open: false,
+    keyword: ''
+  }
 
+  handleClickOpen() {
+    this.setState({open: true});
+  }
 
-        {[
-            {nama:'Home',link:'/'}, 
-            {nama:'Movie',link:'/movie'},
-            {nama:'Ongoing',link:'/ongoing'},
-            {nama:'Completed',link:'/complete'},
-            {nama:'Genre',link:'/genre'},
-         ].map((text, index) => (
-          <ListItem button key={text.nama} component={RouterLink} to={text.link}>
-            <ListItemText primary={text.nama} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+  handleClose() {
+    this.setState({open: false});
+  }
 
-  return (
-    <div  className={classes.tampilhamburger}>
-      <IconButton className={classes.hamburgercolor} onClick={toggleDrawer('bottom', true)}>
-        <Hamburger />
-      </IconButton>
-      <Drawer
-        anchor="bottom"
-        open={state.bottom}
-        onClose={toggleDrawer('bottom', false)}
-        onOpen={toggleDrawer('bottom', true)}
-        className={classes.tampilhamburger}
-      >
-        <div>
-          <Search />
+  handleSubmit(e){
+    e.preventDefault();
+    let keyword = this.state.keyword.replace(/ /g, '+');
+    this.props.history.push({
+      pathname: '/cari',
+      search: `?keyword=${keyword}`,
+    });
+
+    this.handleClose();
+  }
+
+  handleChange(e){
+    this.setState({keyword: e.target.value});
+  }
+
+  render(){
+    return (
+      <div >
+        <IconButton className={this.props.classes.hamburgercolor} onClick={this.handleClickOpen.bind(this)}>
+          <Hamburger />
+        </IconButton>
+        <Dialog fullScreen open={this.state.open} onClose={this.handleClose.bind(this)} TransitionComponent={Transition} >
+        <div style={{backgroundImage: `url('${Logo}')`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', height: '100%'}}>
+        <div style={{height: '50px'}}>
+          <Fab color="secondary" onClick={this.handleClose.bind(this)} size="small" style={{margin: '10px', float: 'right'}}>
+            <CloseIcon />
+          </Fab>
         </div>
-        {fullList('bottom')}
-      </Drawer>
-    </div>
-  );
+          <div style={{padding: 10}}>
+            <form onSubmit={this.handleSubmit.bind(this)}>
+              <TextField variant="outlined" placeholder="Cari.." style={{width: '79%'}} onChange={this.handleChange.bind(this)}/>
+              <Button type="submit" color="primary" size="small" style={{marginTop: '10px'}}><SearchIcon /></Button>
+            </form>
+          </div>
+          <List>        
+            <ListItem button component={RouterLink} to='/' onClick={this.handleClose.bind(this)}>
+              <ListItemIcon><Home /></ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button component={RouterLink} to='/ongoing' onClick={this.handleClose.bind(this)}>
+              <ListItemIcon><Play /></ListItemIcon>
+              <ListItemText primary='Ongoing' />
+            </ListItem>
+            <ListItem button component={RouterLink} to='/complete' onClick={this.handleClose.bind(this)}>
+              <ListItemIcon><Done /></ListItemIcon>
+              <ListItemText primary='Completed' />
+            </ListItem>
+            <ListItem button component={RouterLink} to='/movie' onClick={this.handleClose.bind(this)}>
+              <ListItemIcon><Movie /></ListItemIcon>
+              <ListItemText primary='Movie' />
+            </ListItem>
+            <ListItem button component={RouterLink} to='/genre' onClick={this.handleClose.bind(this)}>
+              <ListItemIcon><Favorite /></ListItemIcon>
+              <ListItemText primary='Genre' />
+            </ListItem>          
+          </List>
+          </div>
+        </Dialog>
+
+      </div>
+    );
+  }
 }
+export default withStyles(styles)(withRouter(AppBarTest));

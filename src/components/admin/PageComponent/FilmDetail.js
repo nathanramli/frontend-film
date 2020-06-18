@@ -30,6 +30,7 @@ class FilmDetail extends Component {
         deskripsi: '',
         gambar: null,
         jenis: '',
+        admin: '',
         genre: []
       }
 
@@ -56,6 +57,7 @@ class FilmDetail extends Component {
                 deskripsi:c.deskripsi,
                 gambar:c.gambar,
                 jenis:c.jenis,
+                admin: c.admin,
                 genre: c.genre
             });
           })
@@ -136,7 +138,11 @@ class FilmDetail extends Component {
                             <TableCell>:</TableCell>
                             <TableCell>{this.state.deskripsi}</TableCell>
                           </TableRow>
-
+                          <TableRow>
+                            <TableCell style={{fontWeight: "bold"}}>Diposting Oleh</TableCell>
+                            <TableCell>:</TableCell>
+                            <TableCell>{this.state.admin}</TableCell>
+                          </TableRow>
                         </TableBody>
                       </Table>
                     </Grid>
